@@ -1,0 +1,10 @@
+name = Open Charity
+description = Module for Open Charity Theme
+core = 7.x
+
+stylesheets[all][] = css/Slider.css
+stylesheets[screen and (max-width: 767px)][] = css/styleHardcode-small.css
+stylesheets[screen and (min-width: 768px)][] = css/styleHardcode.css
+
+scripts[] = js/Slider.js
+scripts[] = js/main.js

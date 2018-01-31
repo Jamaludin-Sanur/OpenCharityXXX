@@ -1,0 +1,28 @@
+/* styling main menu */
+.oc-menu{
+	background-color:#ffffff;
+	text-align:right;
+}
+
+.oc-menu li {
+	list-style-type:none;
+	display:inline-block;
+	vertical-align:center;
+	margin: .9rem 3rem .9rem 0rem;
+}
+
+.oc-menu li:last-of-type a{
+	border: 2px solid #61c0bd;
+	padding:0.5rem 2rem;
+	color: #61c0bd;
+}
+
+.oc-menu a{
+	font-family: "MuseoSans_500",sans-serif;
+	text-decoration: none;
+	color: #575656;
+	font-size: .89rem;
+}
+/* --end of styling main menu */
+
+

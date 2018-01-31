@@ -1,0 +1,180 @@
+* {
+    box-sizing: border-box;
+}
+
+body{
+	background-color:#ffffff;
+	margin:0px;
+	padding:0px;
+}
+
+hr{
+	border: none;
+    height: 1px;
+	background-color: #979eb1;
+}
+
+.region{
+	width:100%;
+	background-color:#f2f2f2;
+}
+
+
+
+/* -------------------
+ Block style
+ --------------------*/
+
+/*  Block */
+.block{
+	width:100%;
+	
+    background-size: 100% auto;
+    background-position: center;
+
+}
+ 
+/*  Block title */
+ .block__title{
+	font-size: 1.5rem;
+	font-family: "MuseoSans_500",sans-serif;
+	text-align: center;
+	color: #575656;
+	margin:0px;
+	padding:1.5rem;
+ }
+ 
+ /*  Block content */
+ .block__content{
+	 overflow:hidden;
+ }
+
+
+
+/* -------------------
+ Article style
+ --------------------*/
+.article{
+	
+}
+
+.article__logo{
+	height: 6rem;
+	width: auto;
+	display:block;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+.article__title{
+	font-family: "Open Sans",sans-serif;
+	font-size: 1rem;
+	text-align: center;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space:nowrap;
+	color: #61c0bd;
+	cursor:pointer;
+	margin:0rem;
+	padding-bottom:.5rem;
+	
+}
+
+.article__title--highlight{
+	font-family: "MuseoSans_300",sans-serif;
+	font-size: 3.5rem;
+	font-weight: 300;
+	color: #ffffff;
+	word-wrap: break-word;
+}
+
+.article__paragraph{
+	font-family: "Open Sans",sans-serif;
+	font-size: .875rem;
+	line-height: 1.375rem;
+	color: #5b6172;
+	margin:0rem;
+}
+
+.article__paragraph--highlight{
+	font-family: "Open Sans",sans-serif;
+	font-size: 1.1rem;
+	color: #ffffff;
+	max-width:38rem;
+	line-height: 2rem;
+	font-weight: 500;
+}
+
+ .article__paragraph--bold{
+	font-family: "Open Sans",sans-serif;
+	font-size: 1rem;
+	margin-top: 1rem;
+}
+
+
+
+.article__link{
+	font-size: .875rem;
+	font-family: "MuseoSans_500",sans-serif;
+	color: #61c0bd;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.article__link--fancy{
+	width: 13rem;
+	border: 2px solid #61c0bd;
+	padding:0.6rem 0rem;
+	display:block;
+}
+
+.article__mission{
+	background-color:#ffffff;
+	margin:-3rem 1rem 1rem 1rem;
+	padding:3rem 0.5rem;
+}
+
+.article__blog{
+	height:3rem;
+}
+
+/* -------------------
+ Logo style
+ --------------------*/
+ .sp-logo{
+	 display:block;
+	 position:absolute;
+	 height:1.5rem;
+	 margin: 1rem 3rem;
+	 cursor:pointer;
+ }
+ 
+ /* -------------------
+ Other
+ --------------------*/
+ .btn_register{
+	 cursor:pointer;
+ }
+
+/* -------------------
+ Helper class
+ --------------------*/
+.center{
+	text-align: center;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+.left{
+	text-align: left;
+	margin-left:1rem;
+	left:0px;
+}
+
+.right{
+	text-align: right;
+	margin-right:1rem;
+	right:0px;
+}
+
+

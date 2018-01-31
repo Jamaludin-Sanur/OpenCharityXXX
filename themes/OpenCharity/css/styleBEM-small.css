@@ -1,0 +1,261 @@
+* {
+    box-sizing: border-box;
+}
+
+body{
+	background-color:#ffffff;
+	margin:0px;
+	padding:0px;
+}
+
+hr{
+	border: none;
+    height: 1px;
+	background-color: #979eb1;
+}
+
+.region{
+	width:100%;
+	background-color:#f2f2f2;
+}
+
+
+
+/* -------------------
+ Block General style
+ --------------------*/
+
+/*  Block */
+.block{
+	width:100%;
+	
+    background-size: cover;
+    background-position: center;
+	clear:both;
+/* 	max-width: 1200px;
+	margin: 0px auto; */
+}
+ 
+/*  Block title */
+ .block__title{
+	font-size: 1.5rem;
+	font-family: "MuseoSans_500",sans-serif;
+	text-align: center;
+	color: #575656;
+	margin:0px;
+	padding:1.5rem;
+ }
+ 
+ /*  Block content */
+ .block__content{
+	 overflow:hidden;
+ }
+
+
+
+/* -------------------
+ Article General style
+ --------------------*/
+.article{
+	padding-bottom:.5rem;
+}
+
+.article__logo{
+	height: 6rem;
+	width: auto;
+	display:block;
+	margin-left:auto;
+	margin-right:auto;
+	
+}
+
+.article__title{
+	font-family: "Open Sans",sans-serif;
+	font-size: 1rem;
+	text-align: center;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space:nowrap;
+	color: #61c0bd;
+	cursor:pointer;
+}
+
+.article__title--highlight{
+	font-family: "MuseoSans_300",sans-serif;
+	font-size: 2.4rem;
+	font-weight: 300;
+	color: #ffffff;
+	word-wrap: break-word;
+}
+
+.article__paragraph{
+	font-family: "Open Sans",sans-serif;
+	font-size: .875rem;
+	line-height: 1.375rem;
+	color: #5b6172;
+	margin:0rem;
+}
+
+.article__paragraph--highlight{
+	font-family: "Open Sans",sans-serif;
+	font-size: 1rem;
+	color: #ffffff;
+	max-width:38rem;
+}
+
+ .article__paragraph--bold{
+	font-family: "Open Sans",sans-serif;
+	font-size: 1rem;
+	margin:0rem;
+	padding:1rem;
+}
+
+.article__link{
+	font-size: .875rem;
+	font-family: "MuseoSans_500",sans-serif;
+	color: #61c0bd;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+.article__link--fancy{
+	width: 13rem;
+	border: 2px solid #61c0bd;
+	padding:0.6rem 0rem;
+	margin:0rem;
+	display:block;
+}
+
+.article__button{
+	cursor: pointer;
+	display:block;
+}
+
+.article__mission{
+	background-color:#ffffff;
+	margin:-3rem 1rem 1rem 1rem;
+	padding:3rem 0.5rem;
+}
+
+.article__blog{
+	height:3rem;
+}
+
+/* -------------------
+ Slider General style
+ --------------------*/
+/*  .slider{
+	 position:relative;
+	 padding:1rem 0rem;
+ }
+ 
+ .slider__viewport{
+	overflow:hidden;
+	margin:0rem 2.5rem;
+}
+ 
+.slider__content{
+	white-space:nowrap;
+	padding:0rem 0rem;
+	list-style-type: none;
+	margin:0px;
+}
+
+.slider__item--horizontal{
+	list-style-type: none;
+	vertical-align: top;
+	display:inline-block;
+	white-space: initial;
+	padding:0rem 1.5rem;
+}
+
+.slider__item--vertical{
+	width:100%;
+	list-style-type: none;
+	vertical-align: top;
+	display:block;
+	white-space: initial;	
+} */
+
+.slider__button--horizontal{
+	height:2rem;
+	width:auto;
+	top:50%;
+	margin-top:-1rem;
+	position:absolute;
+	cursor:pointer;
+}
+
+.slider__button--vertical{
+	width:2rem;
+	height:auto;
+	position:initial;
+	display:block;
+	margin: 0px auto;
+	cursor:pointer;
+}
+
+.slider__page_btn{
+	
+	background: url("../images/page_btn") no-repeat center center;
+	width:1rem;
+	height:1rem;
+	background-size:cover;
+	cursor:pointer;
+	border:none;
+	text-align:center;
+	margin:1rem 0.3rem;
+}
+
+.slider__page_btn--selected{
+	background:url("../images/page_btn_selected") no-repeat center center;
+	width:1rem;
+	height:1rem;
+	background-size:cover;
+	cursor:pointer;
+	border:none;
+	text-align:center;
+	margin:1rem 0.3rem;
+}
+
+
+
+/* -------------------
+ Logo style
+ --------------------*/
+ .sp-logo{
+	 display:block;
+	 position:inital;
+	 height:2.5rem;
+	 margin: 0.5rem auto;
+ }
+ 
+ /* -------------------
+ Other
+ --------------------*/
+ .btn_register{
+	 display:none;
+ }
+ 
+/* -------------------
+ Helper class
+ --------------------*/
+.center{
+	text-align: center;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+.left{
+	text-align: left;
+	margin-left:1rem;
+	left:0px;
+}
+
+.right{
+	text-align: right;
+	margin-right:1rem;
+	right:0px;
+}
+
+

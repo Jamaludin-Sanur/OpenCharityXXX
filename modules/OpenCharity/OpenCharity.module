@@ -1,0 +1,341 @@
+<?php
+const BLOCK_CONTAINER_SIZE = 7;
+const BLOCK_MENU_SIZE = 3;
+const DEFAULT_BLOCK_CONTAINER_COLOR = "#FFFFFF";
+const DEFAULT_BLOCK_CONTAINER_STYLE = "vertical";
+const DEFAULT_BLOCK_CONTAINER_MAX_DISPLAY = 3;
+
+// Define blocks which displayed in block administration page
+function OpenCharity_block_info() {
+	
+	// Generate block menu
+	for($i=0;$i<BLOCK_MENU_SIZE;$i++){
+	  $blocks['oc-menu_'.($i+1)] = array(
+		'info' => t('Open Charity - Menu #'.($i+1)), 
+		'cache' => DRUPAL_NO_CACHE,
+	  );
+	}	
+  
+	// Generate block container
+	for($i=0;$i<BLOCK_CONTAINER_SIZE;$i++){
+	  $blocks['oc-container_'.($i+1)] = array(
+		'info' => t('Open Charity - Container #'.($i+1)),
+		'cache' => DRUPAL_NO_CACHE,
+	  );  	  
+  }  
+  
+  return $blocks;
+}
+
+// Display form in block configuration
+function OpenCharity_block_configure($delta = '') {
+
+	$form = array();
+	
+	// check if block name contain prefix 'oc-menu'	
+	if(strcmp(substr($delta, 0, 7),"oc-menu") == 0 ){
+		$tree = menu_get_menus();
+		$tree = menu_parent_options($tree, null);
+		$tree[' '] = '--none--';
+		$form[$delta.'-menu'] = array(
+		  '#title' => t('Select root menu to display'),
+		  '#type' => 'select',
+		  '#options' => $tree,
+		  '#default_value' => array( variable_get($delta."-menu", ' ')),
+		);				
+	}
+	
+	// check if block name contain prefix 'oc-container'
+	else if( strcmp(substr($delta, 0, 12),"oc-container") == 0){
+
+		// include javascript file to this configuration page
+		$form['#attached']['js'][] = array(
+		  'data' => drupal_get_path('module', 'OpenCharity') . '/js/SliderConfig.js',
+		  'type' => 'file' 
+		);	
+
+		// Display rich text editor
+		$form[$delta."-info"] = array(
+		'#type' => 'text_format',
+		'#title' => t('Block additional info (optional)'),
+		'#size' => 500,
+		'#default_value' => variable_get($delta."-info", ''),);	 	
+
+		// Display form background checkbox
+		$form[$delta."-showBackground"] = array(
+			'#title' => t('Display block background'),
+			'#type' => 'checkboxes',
+			'#options' => array('1' => "(uncheck for transparent background)"),
+			'#default_value' => array( variable_get($delta."-showBackground", '1')),
+			'#attributes'=> array(
+				'onchange' => 'oc.toggleFormColor()',
+				'id' => 'form_inputBg'
+			),
+		); 	
+			
+		// Container for form color and image
+		$form[$delta.'-form_bg'] = array(
+		  '#type' => 'container',
+		  '#attributes' => array(
+			'id' => array(
+			  'form_bg',
+			),
+		  ),
+		);
+		
+		// Display form background color  
+		$form[$delta.'-form_bg'][$delta."bg_color"] = array(
+			'#type' => 'textfield',
+			'#attributes' => array(
+				' type' => 'color'
+			),
+			'#title' => t('Block background color'),
+			'#default_value' => variable_get($delta."-bg_color", DEFAULT_BLOCK_CONTAINER_COLOR),
+			'#prefix' => "<div class='form_color'>",
+			'#suffix' => "</div>"
+		);	
+		
+		// Display form background img
+		$form[$delta.'-form_bg'][$delta."bg_img"] = array(
+			'#name' => '$delta',
+			'#type' => 'managed_file',
+			'#title' => t('Block background image'),
+			'#description' => t('*.gif, *.png, *.jpg, and *.jpeg'),
+			'#default_value' => variable_get($delta."-bg_img", ''),
+			'#upload_location' => 'public://oc-container/',
+			'#upload_validators' => array( 'file_validate_extensions' => array('gif png jpg jpeg') ),
+		);
+		
+		// Display tags dropdown form if tags exist
+		$voc = taxonomy_vocabulary_machine_name_load('TAGS');
+		$tree = taxonomy_get_tree($voc->vid);
+		if(count($tree) < 1){
+			//no tags
+			$form[$delta."-tags_not_found"] = array(
+				'#title' => t('Select tag to display'),
+				'#type' => 'textfield',
+				'#attributes' => array(
+					'readonly' => 'readonly',
+				),
+				'#default_value' => t('No tags found! '),
+			);
+		}
+		else{
+			//tags exist
+			$options = array(' ' => '-none-');		
+			foreach($tree as $key => $value){
+				$options[$value->tid] = $value->name;
+			}
+			$form[$delta."-tag"] = array(
+			  '#title' => t('Select tag to display'),
+			  '#type' => 'select',
+			  '#default_value' => variable_get($delta."-tag", ' '),
+			  '#options' => $options,
+			);				
+		}
+
+
+		// Display max article form 
+		$form[$delta."-node_max"] = array(
+			'#type' => 'textfield',
+			'#attributes' => array(
+				' type' => 'number', 
+			),
+			'#title' => 'Max Article',
+			'#required' => true,
+			'#maxlength' => 3,
+			'#default_value' => variable_get($delta."-node_max", DEFAULT_BLOCK_CONTAINER_MAX_DISPLAY),
+		);		
+		
+		// Display form slider style 
+		$form[$delta."-node_style"] = array(
+		  '#title' => t('Select slider style'),
+		  '#type' => 'select',
+		  '#options' => array("horizontal" => "Horizontal", "vertical" => "Vertical"),
+		  '#default_value' => variable_get($delta."-node_style", DEFAULT_BLOCK_CONTAINER_STYLE)
+		);		
+	}
+
+    return $form;
+}
+
+// Save block configuration form value
+function OpenCharity_block_save($delta = '', $edit = array()) {
+	
+	// check if block name contain prefix 'oc-menu'
+	if(strcmp(substr($delta, 0, 7),"oc-menu") == 0){
+		$selectValue = $edit[$delta.'-menu'];
+		$selectValue = substr($selectValue, 0, -2);
+		variable_set($delta.'-menu', $selectValue);	
+	}
+	
+	// check if block name contain prefix 'oc-container'
+	else if(strcmp(substr($delta, 0, 12),"oc-container") == 0){
+		
+		//save rich text format
+		variable_set($delta."-info", $edit[$delta."-info"]['value']);
+	
+		//save display background value
+		variable_set($delta."-showBackground", $edit[$delta."-showBackground"]['1']);
+		
+		// Saving bg img
+		$file = file_load($edit[$delta."bg_img"]);
+		if($file){
+			$file->status = FILE_STATUS_PERMANENT;
+			file_save($file);
+			//$block = block_load($delta."-background", $delta."-background");
+			file_usage_add($file, $delta."-bg_img", 'block', $file->fid);
+			variable_set($delta."-bg_img", $file->fid);			
+		}
+
+		//save bg color
+		variable_set($delta."-bg_color", $edit[$delta."bg_color"]);
+
+		// Save tag
+		if(isset($edit[$delta."-tag"])){
+			variable_set($delta."-tag", $edit[$delta."-tag"]);	
+		}
+		
+		// Save max article display
+		variable_set($delta."-node_max", $edit[$delta."-node_max"]);
+		
+		// Save slider style
+		variable_set($delta."-node_style", $edit[$delta."-node_style"]);
+
+	}
+}
+
+// Display block
+function OpenCharity_block_view($delta = '')
+{
+
+	$block = array();
+	
+	// Display block menu
+	if(strcmp(substr($delta, 0, 7),"oc-menu") == 0){
+
+		$block['content'] .= "<div>";
+	
+		$logoPath = theme_get_setting('logo', 'SinglePage');
+		if(isset($logoPath) && trim($logoPath)!==''){
+			$block['content'] .= "<img class='sp-logo' alt='' src='{$logoPath}' />";
+		}
+		
+		$menu = variable_get($delta.'-menu', '');
+		if(isset($menu) && trim($menu)!==''){
+			$allMenu = menu_navigation_links(variable_get($delta.'-menu', ''));
+			$block['content'] .= theme('links__menu', array('links' => $allMenu));			
+		}
+		$block['content'] .= "</div>";
+	}
+	
+	// Display block container
+	else if(strcmp(substr($delta, 0, 12),"oc-container") == 0){
+
+		$block['content'] .= variable_get($delta."-info", '');
+		
+		$tid = variable_get($delta."-tag", '');
+		if(!empty($tid)){
+
+			// contains DOM attribute
+			$article_attr = "";			
+			
+			// set class attribute to determine horizontal or vertical display
+			$slider_style = variable_get($delta."-node_style", '');
+			if(!empty($slider_style)){
+				$article_attr .= " data-slider_style='".( strtolower($slider_style) )."'";
+			}
+			
+			// set attribute to determine max displayed article
+			$article_max = variable_get($delta."-node_max", '');
+			if(!empty($article_max)){
+				$article_attr .= " data-max_article='".$article_max."'";
+			}
+			
+			// put attribute to DOM
+			$block['content'] .= "<div class='slider' {$article_attr}>";
+			
+			// display article content inside the DOM
+			$nid_array = taxonomy_select_nodes($tid, FALSE);
+			foreach($nid_array as $nid){
+				
+				// article wrapper
+				$output = "<div class='article'>";
+				
+				// display article image
+				$nodeView = node_view(node_load($nid));
+				$nodeView['field_image'][0]['#item']['attributes'] = array("class" => "article__logo");
+				$output .= render( $nodeView["field_image"] );
+				
+				//Display article title if not empty and not contain prefix '#'
+				$nodeTitle = $nodeView['#node']->title;
+				if( isset($nodeTitle) && trim($nodeTitle)!=='' )
+				{
+					 if(strcmp(substr($nodeTitle, 0, 1),"#") != 0){
+						$output .= "<h2 class=article__title>{$nodeTitle}</h2>";
+					 }			 
+				}		
+				// display article body
+				$nodeView['body']['#attributes'] = array("class" => "article__paragraph");
+				$output .= render( $nodeView["body"] );
+				
+				// close wrapper
+				$output .= "</div>";
+				
+				// put wrapper inside the DOM
+				$block['content'] .= $output;
+			}	
+			// close the DOM
+			$block['content']  .= "</div>";
+		}
+
+	}	
+    return $block;
+}
+
+// Set attribute for displayed block
+function OpenCharity_preprocess_block(&$vars) {
+
+	// set block title class
+	$vars['title_attributes_array']['class'] = "block__title"; 
+	// set block content class
+	$vars['content_attributes_array']['class'] = "block__content";	
+
+	// check if block name contain prefix 'oc-container'	
+	if (strpos($vars['block']->delta, "oc-container") !== false){
+			
+			// set block class
+			$vars['classes_array'][1] = "oc-container";
+			
+			// Determine whether to display block background or not
+			$isDisplayBackground = variable_get($vars['block']->delta."-showBackground", '');
+			if($isDisplayBackground == '1'){
+				
+					$vars['attributes_array'] = array('style' => '');
+					
+					// set background Image
+					$articleBackground = variable_get($vars['block']->delta."-bg_img", '');
+					if(!empty($articleBackground)){
+						$file = file_load($articleBackground);
+						if($file){
+							$url = file_create_url($file->uri);
+							$vars['attributes_array']['style'] .= "background-image:url({$url});";							
+						}
+					}
+					
+					// set background color
+					$bgColor = variable_get($vars['block']->delta."-bg_color", '');
+					if(!empty($bgColor)){
+						$vars['attributes_array']['style'] .= "background-color:{$bgColor};";
+					}			
+			}
+	}
+	
+	// check if block name contain prefix 'oc-menu'
+	else if(strpos($vars['block']->delta, "oc-menu") !== false){
+		// set block class
+		$vars['classes_array'][1] = "oc-menu";
+	}
+}
+
+?>
