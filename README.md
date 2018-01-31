@@ -1,2 +1,2 @@
 # OpenCharityXXX
-The OpenCharity
+Please check README.docx
