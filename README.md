@@ -1,2 +1,3 @@
 # OpenCharityXXX
-Please check README.docx
+
+http://35.225.132.2/
